@@ -1,0 +1,9 @@
+#Learnign how recursion workd
+
+def fibonacci(num)
+  if num < 2
+    num
+  else
+    fibonacci(num - 1) + fibonacci(num - 2)
+  end
+end
