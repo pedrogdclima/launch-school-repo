@@ -24,4 +24,4 @@ elsif operation == "divide"
   result = number1.to_f / number2.to_f
 end
 
-puts result
+puts "The result is #{result}!"
