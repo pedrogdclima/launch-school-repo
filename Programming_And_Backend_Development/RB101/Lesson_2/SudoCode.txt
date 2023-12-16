@@ -1,0 +1,12 @@
+File for practising writing sudo code.
+
+1. A method that returns the sum of two integers
+
+2. A method that takes an arrays if strings, and returns a string that is all those strings concatenated together
+
+3. A method that takes an array of integers, and returns a new array with every other element from the original array, starting with the first element.
+
+4. A method that determines the index of the 3rd occurance of a given character in a string.
+
+5. A method that takes two arrays of numbers and returns the result of merging the arrays. The elements of the first array should become the elements at the even indexes of the returned array, while the elements of the second array should become the elements at the odd indexes.
+
