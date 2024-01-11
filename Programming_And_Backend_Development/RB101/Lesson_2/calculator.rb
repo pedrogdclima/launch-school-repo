@@ -84,10 +84,7 @@ loop do
       prompt "Please choose 1, 2, 3, or 4!"
     end
   end
-  
   prompt "#{number1} #{operation_to_message(operation)} #{number2} is #{result}"
-  
-  #prompt("The result is #{result}!")
   sleep 2
   prompt("Would you like to perform another calculation?")
   break unless gets.downcase.start_with?("y")
