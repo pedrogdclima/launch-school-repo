@@ -4,25 +4,25 @@ def prompt message
   puts "==> #{message}"
 end
 
-def show_result(user, cpu)
-  if user == "rock" && cpu == "scissors" ||
-     user == "paper" && cpu == "rock" ||
-     user == "scissors" && cpu == "paper"
-    prompt "I chose #{cpu} so you win!"
-  elsif user == "rock" && cpu == "paper" ||
-        user == "paper" && cpu == "scissors" ||
-        user == "scissors" && cpu == "rock"
-    prompt "I chose #{cpu} so I win!"
+def determine_winner(player1, player2)
+  if player1 == player2
+    return nil
+  elsif player1 == "rock" && player2 == "scissors" ||
+     player1 == "paper" && player2 == "rock" ||
+     player1 == "scissors" && player2 == "paper"
+    return player1
   else
-    prompt "We both chose #{user} so it's a draw!"
+    return player2
   end
 end
 
 user_choice = nil
+user_score = 0
+cpu_score = 0
 
 prompt "Welcome to Rock, Paper, Scissors!"
-
-# loop do
+sleep 1
+loop do
   loop do
     prompt "What is your choice?"
     user_choice = gets.chomp.downcase
@@ -35,6 +35,24 @@ prompt "Welcome to Rock, Paper, Scissors!"
     end
   end
   cpu_choice = VALID_CHOICES.sample
-  show_result(user_choice, cpu_choice)
-# end
+  prompt "I choose #{cpu_choice}"
+  sleep 2
+  if determine_winner(user_choice, cpu_choice) == user_choice
+    user_score += 1
+    prompt "You win this round!"
+  elsif determine_winner(user_choice, cpu_choice) == cpu_choice
+    cpu_score += 1
+    prompt "I win this round!"
+  else
+    prompt "It's a draw!"
+  end
+  sleep 2
+  if user_score == 3 || cpu_score == 3
+    prompt "That's it! You won #{user_score} and I won #{cpu_score}"
+    break
+  else
+    prompt "The score is #{user_score} to you and #{cpu_score} to me."
+    prompt "Next round."
+  end
+end
 prompt "Thanks for playing! Goodbye!"
