@@ -1,4 +1,4 @@
-require "pry"
+# require "pry"
 
 SUITS = ["Clubs", "Hearts", "Spades", "Diamonds"]
 FACES = [] + ("2".."10").to_a + ["Jack", "Queen", "King", "Ace"]
@@ -40,7 +40,6 @@ player_hand.each_with_object(lines) do |card|
 end
 
 puts lines
-puts "😊"
 
 def display_card_graphically(card, line)
   puts " ----- " + "  "
