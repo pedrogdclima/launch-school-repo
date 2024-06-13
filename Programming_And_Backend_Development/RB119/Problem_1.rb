@@ -16,6 +16,8 @@ E Examples/Test Cases
 D Data Structure
   
 A Algorithm
+  -One method will take a number, select numbers that are smaller than it from original array, and return the sixe of the selected array.
+  -Next method will iterate over iput array, sending each element to the previous array and receiving it's smaller than count and will >> into new array.
 C Code
 =end
 
