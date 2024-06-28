@@ -6,7 +6,25 @@ You may assume that the string argument consists entirely of lowercase alphabeti
 The tests below should each print true.
 =end
 
-p repeated_substring('xyzxyzxyz') == ['xyz', 3]
+# Problem
+# -
+
+# Data
+# -
+
+# Code
+
+def repeated_substring(string)
+    substring_frequency = {}
+    substring = string.dup
+    until substring.empty? == true
+        substring_frequency[substring] = string.scan(substring).size
+        substring.chop!
+    end
+    hash_solution = substring_frequency.select{|k,v|string.length == k.length * v}.select{|k,v| v == substring_frequency.values.max}.to_a.flatten
+end
+
+p repeated_substring('xyzxyzxyz') #== ['xyz', 3]
 p repeated_substring('xyxy') == ['xy', 2]
 p repeated_substring('xyz') == ['xyz', 1]
 p repeated_substring('aaaaaaaa') == ['a', 8]

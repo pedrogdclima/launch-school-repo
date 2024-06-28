@@ -35,15 +35,15 @@ def calc_difference(a,b)
 end
 
 def closest_numbers(array)
-    smallest_difference = 999
+    smallest_difference = array.max
     number_one = nil
     number_two = nil
-    array.each do |first_number|
-        array.each do |second_number|
+    array.each_with_index do |first_number, first_index|
+        array.each_with_index do |second_number, second_index|
+            next if first_index == second_index
+            
             current_diff = calc_difference(first_number, second_number)
             if current_diff > smallest_difference
-                next
-            elsif current_diff == 0
                 next
             elsif current_diff == smallest_difference
                 next
@@ -64,5 +64,6 @@ p closest_numbers([12, 22, 7, 17]) == [12, 7]
 p closest_numbers([5, 25, 15, 11, 20])
 p closest_numbers([19, 25, 32, 4, 27, 16])
 p closest_numbers([12, 22, 7, 17])
+p closest_numbers([1,5,8,8,16])
 
 # 30 minutes - 14.06.2024

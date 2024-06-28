@@ -8,6 +8,7 @@ If the argument is negative, return 0.
 The test below should each print true.
 =end
 
+
 p seven_eleven(10) == 7
 p seven_eleven(11) == 7
 p seven_eleven(12) == 18
