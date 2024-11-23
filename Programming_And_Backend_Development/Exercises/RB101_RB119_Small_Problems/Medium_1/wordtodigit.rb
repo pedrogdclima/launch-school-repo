@@ -1,4 +1,3 @@
-require "pry"
 =begin
 Write a method that takes a sentence string as input, and returns the same
 string with any sequence of the words 'zero', 'one', 'two', 'three', 'four',
@@ -19,11 +18,10 @@ string = gets.chomp
 puts "Thanks"
 result = string.split.map do |word|
     if WORD_TO_DIGIT_HASH.keys.include?(word)
-      return WORD_TO_DIGIT_HASH[word]
+      WORD_TO_DIGIT_HASH[word]
     else
-      return word
+      word
     end
-    binding.pry
   end
 
-p result
+p result.join(" ")
