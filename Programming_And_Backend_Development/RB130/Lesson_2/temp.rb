@@ -1,7 +1,3 @@
-require 'minitest/autorun'
+# Test file
 
-class MyFirstClass < Minitest::Test
-  def test_first_test
-    assert true
-  end
-end
+puts "This is a Ruby file!"
