@@ -162,12 +162,12 @@ class TodoList
   end
 end
 
-# todo = Todo.new("Testing")
-# list = TodoList.new("Today")
-# list.add(todo)
-# puts list
-# p list.mark_undone_at(0)
-# puts list
+todo = Todo.new("Testing")
+list = TodoList.new("Today")
+list.add(todo)
+puts list
+p list.mark_done_at(0)
+puts list
 
 # array = ["Sort costume", "Mail document", "Finish laundry", "Organize date-night", "Answer Slack"]
 # todays_todo_list = TodoList.new("Friday")
