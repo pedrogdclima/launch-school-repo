@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require_relative 'diamond_s2'
+require_relative 'diamond_s3'
 
 class DiamondTest < Minitest::Test
   def test_letter_a
