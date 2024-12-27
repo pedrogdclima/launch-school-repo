@@ -9,8 +9,7 @@ def sum_square_difference(integer)
     first_sum += i
     second_sum += (i**2)
   end
-  first_sum = first_sum ** 2
-  first_sum - second_sum
+  first_sum**2 - second_sum
 end
 
 p sum_square_difference(3) == 22
