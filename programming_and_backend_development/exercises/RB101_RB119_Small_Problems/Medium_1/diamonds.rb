@@ -28,3 +28,19 @@ diamond(3)
     *
 
 =end
+
+def diamond(size)
+    diamond_top = make_top_half(size)
+    puts diamond_top, diamond_top[0..-2].reverse
+end
+
+def make_top_half(size)
+    lines = []
+    1.upto(size) do |int|
+        next if int.even?
+        lines << "#{"*" * int}".center(size)
+    end
+    lines
+end
+
+diamond(9)
