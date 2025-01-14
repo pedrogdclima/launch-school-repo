@@ -1,14 +1,12 @@
 #!/bin/bash
 
-# echo Provide an integer
+echo Provide an integer
 
-# read integer
-
-integer=10
+read integer
 
 start=0
 
-until [[ $start -gt $integer ]]
+until [[ $start -gt $((integer)) ]]
 do
   echo $start
   ((start++))
