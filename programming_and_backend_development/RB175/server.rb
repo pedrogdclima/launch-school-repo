@@ -9,6 +9,10 @@ loop do
   puts request_line
   next if !request_line || request_line =~ /favicon/
   
+  client.puts "HTTP/1.1 200 OK"
+  client.puts "Content-Type: text/plain\r\n\r\n"
+
   client.puts request_line
-  clinet.close
+
+  client.close
 end
