@@ -1,0 +1,8 @@
+#  Gemfile
+source 'https://rubygems.org'
+
+ruby 
+gem 'sinatra'
+gem 'erubis'
+gem 'rack'
+gem 'rake'
