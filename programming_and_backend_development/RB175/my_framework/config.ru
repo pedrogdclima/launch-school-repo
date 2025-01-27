@@ -1,3 +1,5 @@
-require_relative 'hello_world'
+# Required Rackup file
 
-run HelloWorld.new
+require_relative 'my_app'
+
+run MyApp.new
