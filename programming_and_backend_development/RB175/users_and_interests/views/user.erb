@@ -1,0 +1,19 @@
+<h2><%= @user_name %></h2>
+
+<div>
+  <p>Email: <%= @user_data[:email] %></p>
+  <p>
+    Interests: <%= @user_data[:interests].join(", ") %>
+  </p>
+</div>
+
+<div>
+  <p>
+    <ul>
+      <% @names_list.each do |name| %>
+        <% next if name == @user_name.downcase %>
+        <li><a href="/user/<%= name %>"><%= name.capitalize %></a></li>
+      <% end %>
+    </ul>
+  </p>
+</div>
