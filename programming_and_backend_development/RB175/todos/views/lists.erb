@@ -1,12 +1,14 @@
+<% content_for :header_links do %>
+  <a class="add" href="/lists/new">New List</a>
+<% end %>
+
 <ul id="lists">
-  <% @lists.each_with_index do |list, index| %>
-  <li>
+  <% sort_collection(@lists, 'lists') do |list, index| %>
+  <li <%= list_complete?(list) ? "class='complete'" : "" %>>
     <a href="/lists/<%= index %>">
       <h2><%= list[:name] %></h2>
-      <p><%= list[:todos].size %></p>
+      <p><%= fraction_completed(list) %></p>
     </a>
   </li>
   <% end %>
 </ul>
-
-<a href="/lists/new">New List</a>
