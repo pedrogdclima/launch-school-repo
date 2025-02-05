@@ -18,7 +18,7 @@
     </ul>
   </header>
   <ul id="todos">
-    <% sort_collection(@list[:todos], 'todos') do |todo, index| %>
+    <% sort_collection(@list[:todos]) do |todo, index| %>
     <li <%= todo[:completed] ? "class='complete'" : "" %>>
 
       <form action="/lists/<%= @index %>/todos/<%= index %>/state" method="post" class="check">

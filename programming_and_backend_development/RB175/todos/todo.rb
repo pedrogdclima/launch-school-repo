@@ -147,11 +147,11 @@ helpers do
     "#{completed}/#{total}"
   end
 
-  def sort_collection(collection, type, &block)
+  def sort_collection(collection, &block)
     complete, incomplete = collection.partition do |ele|
-      if type == 'lists'
+      if !!ele[:todos]
         list_complete?(ele)
-      elsif type == 'todos'
+      else
         ele[:completed]
       end
     end
@@ -160,19 +160,6 @@ helpers do
     complete.each { |ele| yield(ele, collection.index(ele)) }
   end
 
-  # def sort_lists(lists, &block)
-  #   complete, incomplete = lists.partition { |list| list_complete?(list) }
-    
-  #   incomplete.each { |list| yield(list, lists.index(list)) }
-  #   complete.each { |list| yield(list, lists.index(list)) }
-  # end
-
-  # def sort_todos(todos, &block)
-  #   complete, incomplete = todos.partition { |todo| todo[:completed] }
-    
-  #   incomplete.each { |todo| yield(todo, todos.index(todo)) }
-  #   complete.each { |todo| yield(todo, todos.index(todo)) }
-  # end
 end
 
 # [
