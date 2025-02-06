@@ -5,5 +5,7 @@ gem "sinatra-contrib"
 gem "erubi"
 gem "puma"
 gem "rackup"
+gem "rack-test"
+gem "minitest"
 
 ruby "3.2.2"
