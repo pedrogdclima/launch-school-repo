@@ -3,9 +3,9 @@
 <% end %>
 
 <ul id="lists">
-  <% sort_collection(@lists) do |list, index| %>
-  <li <%= list_complete?(list) ? "class='complete'" : "" %>>
-    <a href="/lists/<%= index %>">
+  <% sort_collection(@lists) do |list| %>
+  <li class="<%= list_class(list) %>">
+    <a href="/lists/<%= list[:id] %>">
       <h2><%= list[:name] %></h2>
       <p><%= fraction_completed(list) %></p>
     </a>

@@ -2,32 +2,36 @@
   <a class="list" href="/lists">All Lists</a>
 <% end %>
 
-<section id="todos" <%= list_complete?(@list) ? "class='complete'" : "" %>>
+<section id="todos" class="<%= list_class(@list) %>">
   <header>
     <h2><%= @list[:name] %></h2>
     <ul>
       <li><%= fraction_completed(@list) %></li>
       <li>
-        <form action="/lists/<%= @index %>/complete" method="post">
+        <form action="/lists/<%= @list_id %>/complete" method="post">
           <button class="check" type="submit">Complete All</button>
         </form>
       </li>
       <li>
-        <a class="edit" href="/lists/<%= @index %>/edit">Edit List</a>
+        <a class="edit" href="/lists/<%= @list_id %>/edit">Edit List</a>
       </li>
     </ul>
   </header>
   <ul id="todos">
-    <% sort_collection(@list[:todos]) do |todo, index| %>
-    <li <%= todo[:completed] ? "class='complete'" : "" %>>
+    <% sort_collection(@list[:todos]) do |todo| %>
+    <% if todo[:completed] %>
+    <li class='complete'>
+    <% else %>
+    <li>
+    <% end %>
 
-      <form action="/lists/<%= @index %>/todos/<%= index %>/state" method="post" class="check">
+      <form action="/lists/<%= @list_id %>/todos/<%= todo[:id] %>/state" method="post" class="check">
         <input type="hidden" name="state" value="<%= todo[:completed] %>">
         <button type="submit">Complete</button>
       </form>
 
       <h3><%= todo[:name] %></h3>
-      <form action="/lists/<%= @index %>/todos/<%= index %>/delete" method="post" class="delete">
+      <form action="/lists/<%= @list_id %>/todos/<%= todo[:id] %>/delete" method="post" class="delete">
         <button type="submit">Delete</button>
       </form>
     </li>
@@ -35,7 +39,7 @@
   </ul>
 </section>
 
-<form action="/lists/<%= @index %>/todos" method="post">
+<form action="/lists/<%= @list_id %>/todos" method="post">
   <dl>
     <dt>
       <label for="todo">Enter a new todo item:</label>
