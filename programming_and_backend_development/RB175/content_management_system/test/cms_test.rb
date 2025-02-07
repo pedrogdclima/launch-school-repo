@@ -28,4 +28,16 @@ class CMSTest < Minitest::Test
     assert_equal "text/plain", last_response["Content-Type"]
     assert_equal "File named about.txt", last_response.body
   end
+
+  def test_invalid_file_name
+    bad_file_name = "invalid_file_name.txt"
+    get "/#{bad_file_name}"
+    assert_equal 302, last_response.status
+
+    get last_response["Location"]
+    assert_includes last_response.body, bad_file_name
+
+    get "/"
+    refute_includes last_response.body, bad_file_name
+  end
 end
