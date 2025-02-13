@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
 gem "sinatra"
@@ -7,5 +9,7 @@ gem "puma"
 gem "rackup"
 gem "rack-test"
 gem "minitest"
+gem "redcarpet"
+gem "bcrypt"
 
 ruby "3.2.2"
