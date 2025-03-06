@@ -177,7 +177,7 @@ post "/:filename/duplicate" do
   new_filename = "copy_#{params[:filename]}"
   new_filepath = File.join(data_path, new_filename)
 
-  if File.exist?(new_filepath) #file_already_exists?(new_filepath)
+  if File.exist?(new_filepath)
     session[:message] = "Rename copy_#{params[:filename]} before duplicating."
     redirect "/"
   end
