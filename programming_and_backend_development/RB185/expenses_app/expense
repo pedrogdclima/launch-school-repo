@@ -9,31 +9,23 @@ class ExpenseData
     @connection = PG.connect(dbname: "expense_db")
   end
 
-  def display_result(query_result)
-    query_result.each do |tuple|
-      columns = [ tuple["id"].rjust(3),
-                  tuple["created_on"].rjust(10),
-                  tuple["amount"].rjust(12),
-                  tuple["memo"] ]
-      puts columns.join(" | ")
-    end
-  end
-
   def list_expenses
     result = @connection.exec("SELECT * FROM expenses ORDER BY created_on ASC")
-    display_result(result)
+    display_count(result)
+    display_result(result) if result.ntuples > 0
   end
 
   def add_expense(arguments)
     date = Date.today
     sql = "INSERT INTO expenses(amount, memo, created_on) VALUES ($1, $2, $3)"
-    @connection.exec_params(sql, [arguments[1], argument[2], date])
+    @connection.exec_params(sql, [arguments[1], arguments[2], date])
   end
 
   def search_expense(arguments)
     sql = "SELECT * FROM expenses WHERE memo ILIKE $1"
     result = @connection.exec_params(sql, ["%#{arguments[1]}%"])
-    display_result(result)
+    display_count(result)
+    display_result(result) if result.ntuples > 0
   end
 
   def delete_expense(arguments)
@@ -52,6 +44,34 @@ class ExpenseData
   def delete_all_expenses
     @connection.exec("DELETE FROM expenses")
     puts "All expenses were deleted."
+  end
+
+  private
+
+  def display_result(query_result)
+    query_result.each do |tuple|
+      columns = [ tuple["id"].rjust(3),
+                  tuple["created_on"].rjust(10),
+                  tuple["amount"].rjust(12),
+                  tuple["memo"] ]
+      puts columns.join(" | ")
+    end
+
+    puts "-" * 50
+    total_amount = query_result.field_values("amount").map(&:to_f).sum
+    puts "Total #{"%.2f".%(total_amount).rjust(25)}"
+  end
+
+  def display_count(result)
+    num_of_rows = result.ntuples
+    case num_of_rows
+    when 0
+      puts "There are no expenses."
+    when 1
+      puts "There is 1 expense."
+    else
+      puts "There are #{num_of_rows} expenses."
+    end
   end
 end
 
