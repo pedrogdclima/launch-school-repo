@@ -23,7 +23,7 @@ function processResponse(input) {
 }
 
 function gradeStudent() {
-  console.log('Welcome to Student Grader!')
+  console.log('Welcome to Student Grader!');
   let goOn = true;
   let count = 1;
   let cgpa = 0;
@@ -39,8 +39,19 @@ function gradeStudent() {
       count += 1;
     }
   }
+
+  cgpa = cgpa / count
   console.log(count + ' grades submitted');
-  console.log('CGPA of ' + (cgpa / count));
+  console.log('CGPA of ' + cgpa);
+  if (cgpa >= 90) {
+    console.log('Grade A');
+  } else if (cgpa >= 70) {
+    console.log('Grade B');
+  } else if (cgpa >= 50) {
+    console.log('Grade C');
+  } else {
+    console.log('Grade F');
+  }
 }
 
 gradeStudent();
