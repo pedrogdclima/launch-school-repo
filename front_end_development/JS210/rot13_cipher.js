@@ -20,6 +20,13 @@
 // a => 97
 // z => 122
 
+const UPPERCASE_A = 65;
+const UPPERCASE_Z = 90;
+const LOWERCASE_A = 97;
+const LOWERCASE_Z = 122;
+const ABC_LENGTH = 26;
+const ROT_NUM = 13;
+
 function rot13(string) {
   let cipher = '';
   let currentCharCode;
@@ -42,22 +49,19 @@ function isCodeForLetter(code) {
 }
 
 function isUpperLetter(code) {
-  return code >= 65 && code <= 90;
+  return code >= UPPERCASE_A && code <= UPPERCASE_Z;
 }
 
 function isLowerLetter(code) {
-  return code >= 97 && code <= 122;
+  return code >= LOWERCASE_A && code <= LOWERCASE_Z;
 }
 
 function rotateCode(code) {
-  if (isLowerLetter(code)) {
-    code += 13;
-    if (code > 122) code -= 26;
-  } else {
-    code += 13;
-    if (code > 90) code -= 26;
-  }
-  return code;
+  let baseNum;
+  let newCharCode;
+  baseNum = isLowerLetter(code) ? LOWERCASE_A : UPPERCASE_A;
+  newCharCode = (code - baseNum + ROT_NUM) % ABC_LENGTH;
+  return newCharCode + baseNum;
 }
 
 console.log(rot13('Hello World!'));
