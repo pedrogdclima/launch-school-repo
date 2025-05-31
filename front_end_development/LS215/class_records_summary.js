@@ -20,6 +20,41 @@ const EXAM_WEIGHT = 0.65;
 const EXERCISE_WEIGHT = 0.35;
 const LETTER_GRADE = { A: 93, B: 85, C: 77, D: 69, E: 60, F: 0};
 
+function generateClassRecordSummary(scores) {
+  let studentGrades = [];
+  let exams = [];
+  for (let studentKey in scores) {
+    let studentScores = scores[studentKey].scores;
+    studentGrades.push(studentGrade(studentScores));
+    studentScores.exams.forEach( (exam, idx) => {
+      exams[idx] ? exams[idx].push(exam) : exams[idx] = [exam];
+    })
+  }
+  exams = exams.map(scoresToStats);
+  return { studentGrades, exams };
+}
+
+function studentGrade(scores) {
+  let exerciseGrade = totalGrade(scores.exercises);
+  let examGrade = averageScore(scores.exams);
+  return calculateFinalGrade(examGrade, exerciseGrade);
+}
+
+function totalGrade(scores) {
+  return scores.reduce(sumScores);
+}
+
+function sumScores(sum, score) { return sum + score };
+
+function averageScore(scores) {
+  return Math.round(scores.reduce(sumScores) / scores.length * 10) / 10;
+}
+
+function calculateFinalGrade(exam, exercise) {
+  let finalGrade = Math.round(exam * EXAM_WEIGHT + exercise * EXERCISE_WEIGHT);
+  return `${finalGrade} (${letterForPercent(finalGrade)})`;
+}
+
 function letterForPercent(number) {
   for (let letter in LETTER_GRADE) {
     if (LETTER_GRADE[letter] > number) continue;
@@ -27,61 +62,25 @@ function letterForPercent(number) {
   }
 }
 
-function sumGrades(sum, grade) { return sum + grade };
+function scoresToStats(scores) {
+  let average = averageScore(scores);
+  let minimum = minScore(scores);
+  let maximum = maxScore(scores);
+  return { average, minimum, maximum };
+}
 
-function minGrade(grades) {
-  return grades.reduce((prevGrade, grade) => {
-    if (prevGrade > grade) return grade;
+function minScore(scores) {
+  return scores.reduce((prevGrade, score) => {
+    if (prevGrade > score) return score;
     return prevGrade;
   })
 }
 
-function maxGrade(grades) {
-  return grades.reduce((prevGrade, grade) => {
-    if (prevGrade < grade) return grade;
+function maxScore(scores) {
+  return scores.reduce((prevGrade, score) => {
+    if (prevGrade < score) return score;
     return prevGrade;
   })
-}
-
-function totalGrade(grades) {
-  return grades.reduce(sumGrades);
-}
-
-function averageGrade(grades) {
-  return Math.round(grades.reduce(sumGrades) / grades.length * 10) / 10;
-}
-
-function finalStudentGrade(exam, exercise) {
-  let finalGrade = Math.round(exam * EXAM_WEIGHT + exercise * EXERCISE_WEIGHT);
-  return `${finalGrade} (${letterForPercent(finalGrade)})`;
-}
-
-function gradesToStats(grades) {
-  let average = averageGrade(grades);
-  let minimum = minGrade(grades);
-  let maximum = maxGrade(grades);
-  return {average, minimum, maximum};
-}
-
-function generateClassRecordSummary(scores) {
-  let studentGrades = [];
-  let examsSummary = [];
-  for (let studentKey in scores) {
-    let results = scores[studentKey].scores;
-    let exerciseGrade = totalGrade(results.exercises);
-    let examGrade = averageGrade(results.exams);
-    let studentGrade = finalStudentGrade(examGrade, exerciseGrade);
-    studentGrades.push(studentGrade);
-    results.exams.forEach( (grade, idx) => {
-      if (Array.isArray(examsSummary[idx])) {
-        examsSummary[idx].push(grade);
-      } else {
-        examsSummary[idx] = [grade];
-      }
-    })
-  }
-  examsSummary = examsSummary.map(gradesToStats);
-  return {studentGrades, examsSummary};
 }
 
 let studentScores = {
