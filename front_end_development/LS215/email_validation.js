@@ -6,26 +6,31 @@
 // The local part must contain one or more letters (A-Z, a-z) and/or digits (0-9). It may not contain any other characters.
 // The domain part must contain two or more components with a single dot (.) between each component. Each component must contain one or more letters (A-Z, a-z) only.
 
-function oneAtChar(string) {
-  return string.match(/@/g).length === 1;
-}
+// function oneAtChar(string) {
+//   return string.match(/@/g).length === 1;
+// }
 
-function validLocalPart(string) {
-  return !Array.isArray(string.match(/[^A-Za-z0-9]/g));
-}
+// function validLocalPart(string) {
+//   return !Array.isArray(string.match(/[^A-Za-z0-9]/g));
+// }
 
-function validDomainPart(string) {
-  if ((string.match(/\.\./) !== null)
-      || (string.match(/[A-Za-z]\.[A-Za-z]/) === null)
-      || (string.match(/[^A-Za-z\.]/) !== null)
-  ) return false;
-  return true;
-}
+// function validDomainPart(string) {
+//   if ((string.match(/\.\./) !== null)
+//       || (string.match(/[A-Za-z]\.[A-Za-z]/) === null)
+//       || (string.match(/[^A-Za-z\.]/) !== null)
+//   ) return false;
+//   return true;
+// }
 
-function isValidEmail(email) {
-  return oneAtChar(email)
-         && validLocalPart(email.split('@').shift())
-         && validDomainPart(email.split('@').pop());
+// function isValidEmail(email) {
+//   return oneAtChar(email)
+//          && validLocalPart(email.split('@').shift())
+//          && validDomainPart(email.split('@').pop());
+// }
+
+function isValidEmail(string) {
+  let regexp = /^[a-z0-9]+@([a-z]+\.)+[a-z]+$/i;
+  return regexp.test(string);
 }
 
 console.log(
