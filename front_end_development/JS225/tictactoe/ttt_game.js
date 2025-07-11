@@ -10,11 +10,8 @@ Marker
 
 */
 
-const readline = require("readline-sync");
-
-// const prompt = `Choose a square: `;
-
-// choice = readline.question(prompt);
+import readline from 'readline-sync';
+import chalk from 'chalk';
 
 class Space {
   constructor(position) {
@@ -23,8 +20,8 @@ class Space {
   }
 
   toString() {
-    if (this.status === null) return `${this.position}`;
-    return `${this.status}`;
+    if (this.status === null) return chalk.grey(`${this.position}`);
+    return chalk.blue.bold(`${this.status}`);
   }
 }
 
@@ -55,9 +52,9 @@ class Board {
       '     |     |     ',
       '-----+-----+-----',
       '     |     |     ',
-      `  ${this.spaces[0]}  |  ${this.spaces[1]}  |  ${this.spaces[2]} `,
+      `  ${this.spaces[0]}  |  ${this.spaces[1]}  |  ${this.spaces[2]}  `,
       '     |     |     ',
-    ].join('\n')
+    ].join('\n');
   }
 
   availableSpaces() {
@@ -80,7 +77,8 @@ class Board {
   }
 
   printBoard() {
-    console.log(this.makeGrid())
+    console.clear();
+    console.log(this.makeGrid());
   }
 
   markSpace(player, position) {
@@ -89,19 +87,16 @@ class Board {
 }
 
 class Player {
-// Data
-// - Name
-// - Marker type
-// - Choose space
+  toString() {
+    return this.name;
+  }
 }
 
-class Computer {
+class Computer extends Player {
   constructor(marker) {
+    super();
+    this.name = 'Computer';
     this.mark = marker;
-  }
-
-  toString() {
-    return 'Computer';
   }
 
   takeTurn(validChoices) {
@@ -113,13 +108,19 @@ class Computer {
   }
 }
 
-class Human {
+class Human extends Player {
   constructor(marker) {
+    super();
     this.mark = marker;
+    this.name = this.chooseName();
   }
 
-  toString() {
-    return 'You';
+  chooseName() {
+    let choice;
+    do {
+      choice = readline.question('You name: ');
+    } while (choice.length <= 0)
+    return choice;    
   }
 
   takeTurn(validChoices) {
