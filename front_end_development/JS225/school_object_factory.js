@@ -18,11 +18,13 @@ function createStudent(name, year) {
   }
 
   return {
+    name,
+    year,
     info() {
       console.log(`${name} is a ${year} year student`)
     },
     listCourses() {
-      console.log(courses);
+      return courses;
     },
     addCourse(course) {
       courses.push(course);
@@ -36,7 +38,6 @@ function createStudent(name, year) {
       else {
         course.notes = note;
       }
-      // course.notes ? course.notes = note : course.notes += `; ${note}`;
     },
     updateNote(courseCode, note) {
       let course = findCourse(courseCode);
@@ -55,23 +56,38 @@ function createStudent(name, year) {
 
 function makeSchool() {
   const validYears = ['1st', '2nd', '3rd', '4th', '5th'];
-  let students = [];
+  let students = {};
+  function validateStudent(name) {
+    if (!(name in students)) {
+      console.log(`No student named '${name}' in system`);
+      return false;
+    };
+    return true;
+  };
   return {
     addStudent(name, year) {
       if (validYears.includes(year)) {
-        students.push(createStudent(name, year));
+        return students[name] = createStudent(name, year);
       } else {
         console.log('Invalid \'year\' value!');
       }
     },
-    enrollStudent(name, code) {
-      
+    enrollStudent(studentObj, courseObj) {
+      studentObj.addCourse(courseObj);
     },
-    addGrade() {
-
+    addGrade(studentObj, courseName, grade) {
+      let courseIdx = studentObj.listCourses()
+                                .find(course => course.name === courseName);
+      let course = studentObj.listCourses()[courseIdx];
+      course.grade = grade;
     },
-    getReportCard() {
-      
+    getReportCard(student) {
+      let courses = student.listCourses();
+      console.log(`== ${student.name}'s Report Card ==`);
+      courses.forEach( course => {
+        console.log(`${course.name}: ${course.grade || 'In Progress'}`);
+      });
+    console.log(`== == == == == == == == == == == ==`);
     },
     courseReport() {
 
@@ -80,3 +96,13 @@ function makeSchool() {
 }
 
 let mySchool = makeSchool();
+let courseCatalogue = {
+  math: {name: 'Math', code: '100'},
+  biology: {name: 'Biology', code: '120'},
+  chemistry: {name: 'Chemistry', code: '150'},
+  english: {name: 'English', code: '101'},
+}
+let pedro = mySchool.addStudent('Pedro', '2nd');
+mySchool.enrollStudent(pedro, courseCatalogue.math);
+mySchool.addGrade(pedro, 'Math', '82');
+mySchool.getReportCard(pedro);

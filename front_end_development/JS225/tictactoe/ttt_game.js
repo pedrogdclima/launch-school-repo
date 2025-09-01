@@ -27,14 +27,14 @@ class Space {
 
 class Board {
   constructor() {
-    this.spaces = [];
+    this.spaces = {};
     for (let position = 1; position < 10; position++) {
-      this.spaces.push(new Space(String(position)));
+      this.spaces[String(position)] = new Space(String(position));
     }
   }
 
-  isWonLine(indexies) {
-    let spaces = indexies.map( index => this.spaces[index] );
+  isWonLine(positions) {
+    let spaces = positions.map( position => this.spaces[position] );
     if (spaces.some( space => space.status === null )) return false;
     if (spaces.every( space => space.status === 'X' )) return true;
     if (spaces.every( space => space.status === 'O' )) return true;
@@ -44,36 +44,36 @@ class Board {
   makeGrid() {
     return [
       '     |     |     ',
-      `  ${this.spaces[6]}  |  ${this.spaces[7]}  |  ${this.spaces[8]}  `,
+      `  ${this.spaces['7']}  |  ${this.spaces['8']}  |  ${this.spaces['9']}  `,
       '     |     |     ',
       '-----+-----+-----',
       '     |     |     ',
-      `  ${this.spaces[3]}  |  ${this.spaces[4]}  |  ${this.spaces[5]}  `,
+      `  ${this.spaces['4']}  |  ${this.spaces['5']}  |  ${this.spaces['6']}  `,
       '     |     |     ',
       '-----+-----+-----',
       '     |     |     ',
-      `  ${this.spaces[0]}  |  ${this.spaces[1]}  |  ${this.spaces[2]}  `,
+      `  ${this.spaces['1']}  |  ${this.spaces['2']}  |  ${this.spaces['3']}  `,
       '     |     |     ',
     ].join('\n');
   }
 
   availableSpaces() {
-    return this.spaces
+    return Object.values(this.spaces)
                .filter( space => space.status === null )
                .map( space => space.position );
   }
 
   isWon() {
     let winningLines = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8],
-      [0, 3, 6], [1, 4, 7], [2, 5, 8],
-      [0, 4, 8], [2, 4, 6]
+      ['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9'],
+      ['1', '4', '7'], ['2', '5', '8'], ['3', '6', '9'],
+      ['1', '5', '9'], ['3', '5', '7']
     ]
     return winningLines.some( line => this.isWonLine(line), this );
   }
 
   playable() {
-    return this.spaces.some( space => space.status === null );
+    return Object.values(this.spaces).some( space => space.status === null );
   }
 
   printBoard() {
@@ -82,7 +82,7 @@ class Board {
   }
 
   markSpace(player, position) {
-    this.spaces[(Number(position) - 1)].status = player.mark;
+    this.spaces[position].status = player.mark;
   }
 }
 
@@ -99,13 +99,28 @@ class Computer extends Player {
     this.mark = marker;
   }
 
-  takeTurn(validChoices) {
-    let choice;
-    while (!validChoices.includes(choice)) {
-      choice = String(Math.floor(Math.random() * 10));
-    }
-    return choice;
+  // Computer chooses random available space
+  // takeTurn(validChoices) {
+  //   let choice;
+  //   while (!validChoices.includes(choice)) {
+  //     choice = String(Math.floor(Math.random() * 10));
+  //   }
+  //   return choice;
+  // }
+
+  // Commputer plays optimally
+
+//   In the following code, we're adding some strategy for the computer. The strategy is as follows:
+
+// If the computer can win with a single play, make that play.
+// If the computer can't win with a single play, but the human can, then try to block that play.
+// If neither player can win with a single play and the center square is empty, play the center square.
+// If none of the above conditions apply, pick a square at random.
+
+  takeTurn(board) {
+
   }
+
 }
 
 class Human extends Player {
@@ -123,7 +138,8 @@ class Human extends Player {
     return choice;    
   }
 
-  takeTurn(validChoices) {
+  takeTurn(board) {
+    let validChoices = board.availableSpaces();
     let choice;
     while (!validChoices.includes(choice)) {
       choice = readline.question('Choose position: ');
@@ -149,7 +165,7 @@ class Game {
   }
 
   playerTurn() {
-    let choice = this.currentPlayer().takeTurn(this.board.availableSpaces());
+    let choice = this.currentPlayer().takeTurn(this.board);
     this.board.markSpace(this.lastPlayer, choice);
   }
 
