@@ -52,10 +52,12 @@ Algorithm
   - If we run out of element, the versions are equal
 */
 
-const VALID_CHARS = /[^0-9.]/;
+const VALID_CHARS = /[^0-9.]|^\.|\.\.+|\.$/;
 
 function compareVersions(version1, version2) {
-  if (VALID_CHARS.test(version1) || VALID_CHARS.test(version2)) return null;
+  if (VALID_CHARS.test(version1) || VALID_CHARS.test(version2)) {
+    return null;
+  }
   [ version1, version2 ] = [version1, version2].map( version => {
     return version.split('.')
                   .filter( ele => ele !== '0' )
@@ -70,6 +72,7 @@ function compareVersions(version1, version2) {
   return 0;
 }
 
+// My Test Cases
 console.log(
   compareVersions('1.5', '2.5') === -1,
   compareVersions('1.5', '1.5') === 0,
@@ -78,3 +81,15 @@ console.log(
   compareVersions('3', '3.0') === 0,
   compareVersions('2.16', '2.1') === 1,
 );
+
+// LS Test Cases
+console.log(compareVersions('1', '1'));            // 0
+console.log(compareVersions('1.1', '1.0'));        // 1
+console.log(compareVersions('2.3.4', '2.3.5'));    // -1
+console.log(compareVersions('1.a', '1'));          // null
+console.log(compareVersions('.1', '1'));           // null
+console.log(compareVersions('1.', '2'));           // null
+console.log(compareVersions('1..0', '2.0'));       // null
+console.log(compareVersions('1.0', '1.0.0'));      // 0
+console.log(compareVersions('1.0.0', '1.1'));      // -1
+console.log(compareVersions('1.0', '1.0.5'));      // -1
