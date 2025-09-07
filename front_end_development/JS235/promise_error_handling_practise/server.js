@@ -10,34 +10,34 @@ const passwords = {                             // WARNING: THIS IS NOT HOW
   Susan: { password: 'Green83', id: 9101 },
 };
 
-function authenticate(username, password, callback) {
-  setTimeout(() => {
-    // 10% chance of an unknown server error
-    if (Math.random() < 0.1) {
-      return callback('Something went wrong. Please try again later.', null);
-    }
-
-    if (passwords[username] && passwords[username].password === password) {
-      callback(null, passwords[username].id);
-    } else {
-      callback('Invalid username or password', null);
-    }
-  }, 1000);
+function authenticate(username, password) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (Math.random() < 0.1) {
+        reject(new Error('Something went wrong. Please try again later.'));
+      }
+      if (passwords[username] && passwords[username].password === password) {
+        resolve(passwords[username].id);
+      } else {
+        reject(new Error('Invalid username or password'));
+      }
+    }, 1000);
+  })
 }
 
-function fetchUserProfile(id, callback) {
-  setTimeout(() => {
-    // 10% chance of an unknown server error
-    if (Math.random() < 0.1) {
-      return callback('Something went wrong. Please try again later.', null);
-    }
+function fetchUserProfile(id) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (Math.random() < 0.1) {
+        reject(new Error('Something went wrong. Please try again later.'));
+      }
 
-    // Normal behavior: check if user exists
-    let userData = users[id];
-    if (userData) {
-      callback(null, userData);
-    } else {
-      callback('User not found', null);
-    }
-  }, 2000);
+      let userData = users[id];
+      if (userData) {
+        resolve(userData);
+      } else {
+        reject(new Error('User not found'));
+      }
+    }, 2000);
+  });
 }

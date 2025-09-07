@@ -36,23 +36,26 @@
   <script src="server.js"></script>
 
   <script>
-    function retryNTimes(fn, n, callback, ...args) {
+
+    function retryNTimes(func, n, ...args) {
       let attempts = 0;
 
       function attempt() {
-        console.log(`Attempt number: ${attempts + 1}`);
-        fn(...args, (error, data) => {
-          if (!error || attempts >= n) {
-            callback(error, data);
-          } else {
-            attempts++;
-            attempt();
-          }
-        });
+        attempts += 1;
+        console.log(`Attempt ${attempts}`);
+        return func(...args)
+          .then(result => result)
+          .catch(error => {
+            if (attempts > n) {
+              return Promise.reject(error);
+            }
+            return attempt();
+          })
       }
 
-      attempt();
+      return attempt();
     }
+  
 
     // Handle form submission
     document.getElementById('userForm').addEventListener('submit', function (event) {
@@ -67,25 +70,20 @@
       const username = document.getElementById('usernameInput').value.trim();
       const password = document.getElementById('passwordInput').value.trim();
 
-      retryNTimes(authenticate, 2, (errorMessage, userId) => {
-        if (userId) {
+      function displayError(error) {
+        errorMessageDiv.textContent = error.message;
+        errorMessageDiv.style.display = 'block';
+      }
+
+      retryNTimes(authenticate, 2, username, password)
+        .then(userId => {
           userInfoDiv.textContent = 'Login Successful! Fetching your data...';
-
-          retryNTimes(fetchUserProfile, 2, (errorMessage, userData) => {
-            if (errorMessage) {
-              errorMessageDiv.textContent = `Error: ${errorMessage}`;
-              errorMessageDiv.style.display = 'block';
-            } else {
-              userInfoDiv.textContent = `Hello, ${userData.name}!\nYou are ${userData.age} years old!`;
-            }
-          }, userId)
-
-        } else {
-          errorMessageDiv.textContent = errorMessage;
-          errorMessageDiv.style.display = 'block';
-        }
-      }, username, password);
-        
+          return retryNTimes(fetchUserProfile, 2, userId);
+        })
+        .then(userData => {
+          userInfoDiv.textContent = `Hello, ${userData.name}!\nYou are ${userData.age} years old!`;
+        })
+        .catch(displayError);  
     });
   </script>
 </body>
