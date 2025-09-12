@@ -9,16 +9,22 @@
 // // I'm ready!         (2 seconds later)
 
 async function breakfast() {
-
+  return new Promise( resolve => {
+    console.log('Eating breakfast...');
+    setTimeout(resolve, 2000);
+  });
 }
 
 async function cleanup() {
-
+  return new Promise( resolve => {
+    console.log('Washing face...');
+    setTimeout(resolve, 1000);
+  })
 }
 
 async function getReady() {
-  breakfast();
-  cleanup();
+  await breakfast();
+  await cleanup();
 }
 
-getReady();
+getReady().finally(() => console.log('Ready for the day'));
