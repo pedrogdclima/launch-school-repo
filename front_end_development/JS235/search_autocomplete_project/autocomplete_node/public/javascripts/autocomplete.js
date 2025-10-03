@@ -46,6 +46,11 @@ const Autocomplete = {
     }
   },
 
+  generateOverlayContent: function(value, match) {
+    let end = match.name.slice(value.length);
+    return value + end;
+  },
+
   draw: function() {
     while (this.listUI.lastChild) {
       this.listUI.removeChild(this.listUI.lastChild);
@@ -58,7 +63,10 @@ const Autocomplete = {
 
     if (this.bestMatchIndex !== null && this.matches.length !== 0) {
       let selected = this.matches[this.bestMatchIndex];
-      this.overlay.textContent = selected.name;
+      this.overlay.textContent = this.generateOverlayContent(
+        this.input.value,
+        selected
+      );
     } else {
       this.overlay.textContent = '';
     }
