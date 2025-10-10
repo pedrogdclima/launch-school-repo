@@ -28,9 +28,6 @@ function renderPhotoInformation(idx) {
 function renderComments(comments) {
   let commentsList = document.querySelector('#comments ul');
   commentsList.innerHTML = templates.comments(comments);
-
-  // let response = await fetch(`/comments?photo_id=${id}`);
-  // return templates.comments(await response.json());
 }
 
 async function main() {
@@ -98,4 +95,64 @@ const slideshow = {
   }
 }
 
-document.addEventListener('DOMContentLoaded', main);
+async function handleButtonClick(event) {
+  event.preventDefault();
+  let button = event.target;
+  let buttonType = button.getAttribute('data-property');
+  if (!buttonType) return;
+
+  let href = button.getAttribute('href');
+  let dataId = Number(button.getAttribute('data-id'));
+  let text = button.textContent;
+
+  let response = await fetch(href, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+    },
+    body: `photo_id=${dataId}`,
+  });
+
+  let json = await response.json();
+  let newTotal = json.total;
+  button.textContent = text.replace(/\d+/, newTotal);
+  
+  let updatedPhoto = photos.find(photo => photo.id === dataId);
+  updatedPhoto[buttonType] = newTotal;
+}
+
+function renderNewComment(comment) {
+  let commentsList = document.querySelector('#comments ul');
+  commentsList.insertAdjacentHTML('beforeend', templates.comment(comment));
+}
+
+async function handleFormSubmit(event) {
+  event.preventDefault();
+  let form = event.target;
+  let href = form.getAttribute('action');
+  let method = form.getAttribute('method');
+  let data = new FormData(form);
+  let currentSlideId = slideshow.currentSlide.getAttribute('data-id');
+  data.set('photo_id', currentSlideId);
+
+  let response = await fetch(href, {
+    method: method,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+    },
+    body: new URLSearchParams([...data]),
+  });
+
+  let newComment = await response.json();
+  renderNewComment(newComment);
+  form.reset();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  main();
+
+  document.querySelector('#information')
+          .addEventListener('click', handleButtonClick);
+
+  document.addEventListener('submit', handleFormSubmit);
+});
