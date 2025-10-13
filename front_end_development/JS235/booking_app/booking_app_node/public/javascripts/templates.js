@@ -37,6 +37,26 @@ const templates = {
     return (`<p>Request timed out. Please try again.</p>`);
   },
 
+  addStaffForm() {
+    return `<form method="post" action="/api/staff_members">
+      <dl>
+        <dt>
+          <label for="email">Email</label>
+        </dt>
+        <dd>
+          <input type="email" id="email" name="email">
+        </dd>
+        <dt>
+          <label for="name">Name</label>
+        </dt>
+        <dd>
+          <input type="text" id="name" name="name">
+        </dd>
+      </dl>
+      <input type="submit">
+    </form>`
+  },
+
   // photo({ id, src, caption }) {
   //   return (
   //     `<figure data-id="${id}">
