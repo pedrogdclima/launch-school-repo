@@ -38,7 +38,7 @@ const templates = {
   },
 
   addStaffForm() {
-    return `<form method="post" action="/api/staff_members">
+    return `<form id="addStaffForm" method="post" action="/api/staff_members">
       <dl>
         <dt>
           <label for="email">Email</label>
@@ -57,54 +57,103 @@ const templates = {
     </form>`
   },
 
-  // photo({ id, src, caption }) {
-  //   return (
-  //     `<figure data-id="${id}">
-  //        <img src="${src}" />
-  //        <figcaption>${caption}</figcaption>
-  //      </figure>`
-  //   );
-  // },
+  moreScheduleFields(index, staffOptions) {
+    index += 1;
+    return `<fieldset id="schedule_${index}">
+      <legend>Schedule ${index}</legend>
 
-  // photos(photosArray) {
-  //   return photosArray.map(photo => this.photo(photo)).join('');
-  // },
+      <div>
+        <label for="staff_${index}">Staff Name:</label>
+        <select id="staff_${index}" name="staff_${index}">${staffOptions}</select>
+      </div>
 
-  // photoInformation({ title, created_at, id, likes, favorites }) {
-  //   return (`
-  //   <h2>${title}</h2>
-  //   <p><time>Taken on ${created_at}</time></p>
-  //   <div class="actions">
-  //     <a href="/photos/like" data-id="${id}" data-property="likes" class="button like">
-  //       ♡ ${likes ? likes : 0} Likes
-  //     </a>
-  //     <a href="/photos/favorite" data-id="${id}" data-property="favorites" class="button favorite">
-  //       ☆ ${favorites ? favorites : 0} Favorites
-  //     </a>
-  //   </div>
-  //   `);
-  // },
+      <div>
+        <label for="date_${index}">Date:</label>
+        <input type="text" id="date_${index}" name="date_${index}" placeholder="mm-dd-yy">
+      </div>
 
-  // comment({ gravatar, name, date, body }) {
-  //   return (`
-  //     <li>
-  //       <article>
-  //         <figure>
-  //           <img src="${gravatar}" />
-  //         </figure>
-  //         <header>
-  //           <h1>${name}</h1>
-  //           <p><small><time>Posted ${date}</time></small></p>
-  //         </header>
-  //         <p>${body}</p>
-  //       </article>
-  //     </li>
-  //     `);
-  // },
+      <div>
+        <label for="time_${index}">Time:</label>
+        <input type="text" id="time_${index}" name="time_${index}" placeholder="hh:mm">
+      </div>
 
-  // comments(commentsArray) {
-  //   return commentsArray.map(comment => this.comment(comment)).join('');
-  // },
+    </fieldset>`;
+  },
+
+  addScheduleSetup() {
+    return `<form id="addScheduleForm" method="post" action="/api/schedules">
+      <div id="schedules"></div>
+      <input id="btnSubmit" type="submit">
+      <button type="button" id="btnMore">Add Another</button>
+    </form>`;
+  },
+
+  renderStaffOptions(staffData) {
+    return staffData.map( ({_1, name, _2}, index) => {
+      return `<option value="${index + 1}">${name}</option>`
+    }).join('');
+  },
+
+  renderBookScheduleForm(options) {
+    return `<form id="bookScheduleForm" method="post" action="/api/bookings">
+      <div>
+        <label for="schedule">Select Schedule:</label>
+        <select id="schedule" name="schedule">${options}</select>
+      </div>
+      <div>
+        <label for="email">Student Email:</label>
+        <input type="email" id="email" name="email">
+      </div>
+    <input type="submit">
+    </form>`;
+  },
+
+  renderScheduleOptions(scheduleData) {
+    return scheduleData.map( ({id, name, date, time }) => {
+      return `<option value="${id}">${name} | ${date} | ${time}</option>`
+    }).join('');
+  },
+
+  renderNewStudentForm(email, sequence) {
+    return `<form id="newStudentForm" method="post" action="/api/students">
+      <h3>Please provide new student details</h3>
+      <label for="email">Email:</label>
+      <input type="email" name="email" id="email" value="${email}">
+      <label for="name">Name:</label>
+      <input type="text" name="name" id="name">
+      <label for="booking_sequence">Booking Sequence:</label>
+      <input type="text" name="booking_sequence" id="booking_sequence" value="${sequence}">
+      <input type="submit">
+    </form>`;
+  },
+
+  renderBookingsByDate(data) {
+    return data.map( date => {
+      return `<p>${date.date}</p>` + date.bookings.map(booking => {
+        return `<p>${booking.toString().replaceAll(',', ' - ')}</p>`;
+      }).join('');
+    }).join('');
+  },
+
+  renderCancelBookingForm(options) {
+    return `<form id="cancelBookingForm" method="put" action="/api/bookings/">
+      <div>
+        <label for="booking">Select Booking:</label>
+        <select id="booking" name="booking">${options}</select>
+      </div>
+    <input type="submit">
+    </form>`;
+  },
+
+  renderCancelScheduleForm(options) {
+    return `<form id="cancelScheduleForm" method="delete" action="/api/schedules/">
+      <div>
+        <label for="schedule">Select Schedule:</label>
+        <select id="schedule" name="schedule">${options}</select>
+      </div>
+    <input type="submit">
+    </form>`;
+  },
 };
 
 export default templates;
