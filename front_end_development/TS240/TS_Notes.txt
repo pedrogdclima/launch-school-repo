@@ -1,0 +1,34 @@
+Calling `tsc` file_name.ts will compile the TS file into a JS file.
+If there are errors, they'll be output to terminal.
+The JS file will be compiled to some version of JS. Default is ES5.
+Setting can be changed passing an option to tsc or having a tsconfig.jsonfile.
+
+TS provides a language service that most code editors will use.
+This means developers get feedback/help as they are writing their TS.
+Code completion, signature help, error checking, 
+
+TypeScript Types:
+
+Primitives
+- String
+  - 'string'
+- Number
+  - 'number'
+- Boolean
+  - 'boolean'
+- Null
+- Undefined
+- Symbol
+- Bigint
+
+- Array
+  - 'Array<string>' / 'Array<number>'
+  - 'string[]' / 'number[]'
+- Promise
+  - 'Promise<string>' / 'Promise<number>'
+
+TypeScript infers types in a number of scenarios:
+- Anonymous and arrow functions
+- var, let, const declarations
+- function returns
+
